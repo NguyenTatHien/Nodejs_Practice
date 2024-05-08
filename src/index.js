@@ -23,7 +23,7 @@ app.use(express.json());
 app.engine(
     'hbs',
     engine({
-          extname: '.hbs',
+        extname: '.hbs',
     }),
 );
 app.set('view engine', 'hbs');
