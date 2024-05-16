@@ -9,29 +9,31 @@
                 <th scope="col">STT</th>
                 <th scope="col">Tên khóa học</th>
                 <th scope="col">Trình độ</th>
-                <th scope="col">Thời gian tạo</th>
+                <th scope="col">Thời gian xóa</th>
                 <th scope="col">Thao tác</th>
             </tr>
         </thead>
         <tbody class="text-center">
             {{#each courses}}
-            <tr>
-                <th scope="row">{{sum @index 1}}</th>
-                <td>{{this.name}}</td>
-                <td>{{this.level}}</td>
-                <td>{{this.createAt}}</td>
-                <td>
-                    <a href="" class="btn btn-info btn-restore" data-id="{{this._id}}">Khôi phục</a>
-                    <a href="" class="btn btn-danger" data-toggle="modal" data-id="{{this._id}}" data-target="#delete-course-modal">Xóa vĩnh viễn</a>
-                </td>
-            </tr>
-            {{else}}
-            <tr>
-                <td colspan="5">
-                    Thùng rác trống.
-                    <a href="/me/stored/courses">Danh sách khóa học</a>
-                </td>
-            </tr>
+              {{#if deleted}}
+                <tr>
+                    <th scope="row">{{sum @index 1}}</th>
+                    <td>{{this.name}}</td>
+                    <td>{{this.level}}</td>
+                    <td>{{this.deletedAt}}</td>
+                    <td>
+                        <a href="" class="btn btn-info btn-restore" data-id="{{this._id}}">Khôi phục</a>
+                        <a href="" class="btn btn-danger" data-toggle="modal" data-id="{{this._id}}" data-target="#delete-course-modal">Xóa vĩnh viễn</a>
+                    </td>
+                </tr>
+              {{/if}}
+              {{else}}
+              <tr>
+                  <td colspan="5">
+                      Thùng rác trống.
+                      <a href="/me/stored/courses">Danh sách khóa học</a>
+                  </td>
+              </tr>
             {{/each}}
         </tbody>
     </table>
@@ -47,7 +49,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <p>Bạn có chắc chắn muốn xóa khóa học này?</p>
+        <p>Hành động này không thể khôi phục Bạn vẫn muốn xóa khóa học này?</p>
       </div>
       <div class="modal-footer">
         <button id="btn-delete-course" type="button" class="btn btn-danger">Xóa bỏ</button>
@@ -57,8 +59,8 @@
   </div>
 </div>
 
-<form method="POST" name="delete-course-form"></form>
-<form method="POST" name="restore-course-form"></form>
+<form name="delete-course-form" method="POST"></form>
+<form name="restore-course-form" method="POST"></form>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -76,7 +78,7 @@
 
         // When dialog confirm clicked
         btnDeleteCourse.onclick = function () {
-            deleteForm.action = '/courses/' + courseId + '?_method=DELETE';
+            deleteForm.action = '/courses/' + courseId + '/force?_method=DELETE';
             deleteForm.submit();
         };
 
